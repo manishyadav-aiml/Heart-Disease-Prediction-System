@@ -1,10 +1,18 @@
 {% extends "prediction/base.html" %}
 {% load static %}
+
 {% block content %}
+
 <section class="hero">
   <div class="hero-text">
     <h1>Check your heart disease risk in minutes</h1>
-    <p>Enter 13 simple health parameters and our Machine Learning model estimates the probability of heart disease and shows a risk level: <strong>LOW</strong>, <strong>MODERATE</strong> or <strong>HIGH</strong>.</p>
+
+    <p>
+      Enter 13 simple health parameters and our Machine Learning model
+      estimates the probability of heart disease and shows a risk level:
+      <strong>LOW</strong>, <strong>MODERATE</strong> or <strong>HIGH</strong>.
+    </p>
+
     <div class="hero-actions">
       {% if user.is_authenticated %}
         <a href="{% url 'predict' %}" class="btn">Start Prediction</a>
@@ -14,61 +22,139 @@
       {% endif %}
     </div>
   </div>
+
   <div class="hero-image">
-    <img src="{% static 'prediction/images/heart.svg' %}" alt="Heart with ECG line" width="260" height="260">
+    <img
+      src="{% static 'prediction/images/heart.svg' %}"
+      alt="Heart with ECG line"
+      width="260"
+      height="260"
+    >
   </div>
 </section>
+
 
 <section class="cards">
+
   <div class="card">
     <h3>1. Register / Login</h3>
-    <p>Create a free account so that your predictions are saved to your own history.</p>
+    <p>
+      Create a free account so that your predictions are saved to your
+      own history.
+    </p>
   </div>
+
   <div class="card">
     <h3>2. Enter health details</h3>
-    <p>Fill in age, blood pressure, cholesterol, ECG result and the other attributes. Every value is validated.</p>
+    <p>
+      Fill in age, blood pressure, cholesterol, ECG result and the other
+      attributes. Every value is validated.
+    </p>
   </div>
+
   <div class="card">
     <h3>3. Get the result</h3>
-    <p>See the probability in percent, the risk level and a short note on what to do next.</p>
+    <p>
+      See the probability in percent, the risk level and a short note
+      on what to do next.
+    </p>
   </div>
+
 </section>
+
 
 {% if user.is_authenticated %}
+
 <section class="panel">
+
   <h2>Your recent predictions</h2>
+
   {% if recent %}
+
   <div class="table-wrap">
     <table class="table">
-      <thead><tr><th>Date</th><th>Age</th><th>Probability</th><th>Risk level</th><th></th></tr></thead>
+
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Age</th>
+          <th>Probability</th>
+          <th>Risk level</th>
+          <th></th>
+        </tr>
+      </thead>
+
       <tbody>
+
       {% for r in recent %}
+
         <tr>
           <td>{{ r.created_at|date:"d M Y, H:i" }}</td>
+
           <td>{{ r.age }}</td>
+
           <td>{{ r.probability|floatformat:1 }}%</td>
-          <td><span class="badge badge-{{ r.risk_level|lower }}">{{ r.risk_level }}</span></td>
-          <td><a href="{% url 'result' r.pk %}">View</a></td>
+
+          <td>
+            <span class="badge badge-{{ r.risk_level|lower }}">
+              {{ r.risk_level }}
+            </span>
+          </td>
+
+          <td>
+            <a href="{% url 'result' r.pk %}">View</a>
+          </td>
         </tr>
+
       {% endfor %}
+
       </tbody>
+
     </table>
   </div>
+
   {% else %}
-    <p>You have not made any prediction yet. <a href="{% url 'predict' %}">Make your first prediction</a>.</p>
+
+    <p>
+      You have not made any prediction yet.
+      <a href="{% url 'predict' %}">Make your first prediction</a>.
+    </p>
+
   {% endif %}
+
 </section>
+
 {% endif %}
 
+
 {% if model_info.best_model %}
+
 <section class="panel">
+
   <h2>About the model</h2>
+
   <p>
-    Selected model: <strong>{{ model_info.best_model }}</strong>, trained on {{ model_info.rows }} records
-    with {{ model_info.features|length }} attributes. Test-set results of the last training run:
-    accuracy {{ model_info.metrics.accuracy }}, precision {{ model_info.metrics.precision }},
-    recall {{ model_info.metrics.recall }}, ROC-AUC {{ model_info.metrics.roc_auc }}.
+    <strong>Selected model:</strong>
+    {{ model_info.best_model }}, selected through 5-fold cross-validation
+    and trained on {{ model_info.rows }} usable records with
+    {{ model_info.features|length }} input features.
   </p>
+
+  <p>
+    <strong>Test-set performance:</strong>
+    Accuracy {{ model_info.metrics.accuracy|floatformat:3 }},
+    Precision {{ model_info.metrics.precision|floatformat:3 }},
+    Recall {{ model_info.metrics.recall|floatformat:3 }},
+    ROC-AUC {{ model_info.metrics.roc_auc|floatformat:3 }}.
+  </p>
+
+  <p>
+    These results represent performance on the dataset and should not be
+    interpreted as clinical diagnostic accuracy.
+  </p>
+
 </section>
+
 {% endif %}
+
 {% endblock %}
