@@ -1,174 +1,166 @@
-# Heart Disease Prediction System
+# \# ❤️ Heart Disease Prediction System
 
-A Django web application that estimates the risk of heart disease from 13 health
-parameters using a Machine Learning model (scikit-learn). Users register, log in,
-enter the values, and get a **probability (%)** and a **risk level (LOW / MODERATE / HIGH)**.
-Every prediction is saved in the user's history.
+# 
 
-> \\\*\\\*Screening aid only.\\\*\\\* This project is for learning. It is not a medical diagnosis
-> and does not replace a doctor.
+# A Django-based web application that uses \*\*Machine Learning\*\* to estimate the probability of heart disease from 13 health-related parameters.
 
-\---
+# 
 
-## IMPORTANT: demo data
+# Users can create an account, enter health information, receive an estimated probability and project-defined risk level (\*\*LOW / MODERATE / HIGH\*\*), view prediction history, and download a PDF report.
 
-The `dataset/heart.csv` in this zip is **synthetic demo data** (random values with the
-same columns as the real dataset), so that the project runs immediately.
-The bundled model is trained on it, so **its predictions are not meaningful**
-and a yellow "Demo mode" banner is shown on every page.
+# 
 
-To use the real dataset (UCI / Cleveland heart disease data, 303 rows, 13 attributes + `target`):
+# > ⚠️ \*\*Medical Disclaimer:\*\* This project is developed for educational and screening purposes only. It is not a medical diagnosis, and its predictions should not replace evaluation or advice from a qualified healthcare professional.
 
-1. Replace `dataset/heart.csv` with the real file (columns: `age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal, target`).
-2. Delete `dataset/DEMO\\\_DATA.txt`.
-3. Run `python train\\\_model.py` and restart the server.
+# 
 
-The training script compares five models with 5-fold cross-validation, saves the best one
-as `model/heart\\\_disease\\\_model.pkl` and the scaler as `model/scaler.pkl`, and prints the test-set metrics
-(use these numbers in your report). The code columns (`cp`, `slope`, `thal`, `target`) must use the same
-numeric coding as the form on the prediction page; check your copy of the dataset.
+# \---
 
-\---
+# 
 
-## Features
+# \## 📌 Project Overview
 
-* User registration, login and logout (Django authentication)
-* Prediction form with 13 validated inputs, grouped in sections
-* Result page with risk level, probability, colour gauge and a short note
-* Prediction history (last 5 on the home page, stored in SQLite)
-* Django admin to view all users and predictions
-* Separate `ml.py` module for loading the model and predicting
+# 
 
-## Project structure
+# The \*\*Heart Disease Prediction System\*\* demonstrates how Machine Learning can be integrated into a Django web application for health-risk screening.
 
-```
-Heart-Disease-Prediction-System/
-├── manage.py
-├── requirements.txt
-├── train\\\_model.py            # trains and saves the model files
-├── README.md
-├── .gitignore
-├── heart\\\_disease/            # project settings, urls, asgi, wsgi
-├── prediction/               # the app
-│   ├── migrations/
-│   ├── templates/prediction/ # base, home, login, register, prediction, result
-│   ├── static/prediction/    # css, js, images
-│   ├── admin.py  apps.py  models.py  views.py  urls.py  forms.py
-│   ├── ml.py                 # model loading + prediction
-│   └── context\\\_processors.py
-├── model/                    # heart\\\_disease\\\_model.pkl, scaler.pkl, model\\\_info.json
-└── dataset/                  # heart.csv (+ generate\\\_demo\\\_dataset.py)
-```
+# 
 
-`db.sqlite3` is created when you run `migrate` (step 4 below).
-`templates/prediction/base.html` is the shared layout used by the five pages.
+# \### 🔄 How the system works
 
-\---
+# 
 
-## Run on localhost
+# 1\. 👤 User creates an account or logs in.
 
-Requirements: **Python 3.9 or newer** and pip.
+# 2\. 📝 User enters 13 health parameters.
 
-### 1\. Open a terminal in the project folder
+# 3\. ✅ The application validates the input values.
 
-```
-cd Heart-Disease-Prediction-System
-```
+# 4\. ⚙️ Input data is preprocessed using the trained scaler.
 
-### 2\. Create and activate a virtual environment
+# 5\. 🤖 The Random Forest model generates an estimated probability.
 
-Windows:
+# 6\. 📊 The probability is converted into a project-defined risk level.
 
-```
-python -m venv venv
-venv\\\\Scripts\\\\activate
-```
+# 7\. 💾 The prediction is saved to the user's history.
 
-Linux / macOS:
+# 8\. 📄 A downloadable PDF report can be generated.
 
-```
-python3 -m venv venv
-source venv/bin/activate
-```
+# 
 
-### 3\. Install the requirements
+# \---
 
-```
-pip install -r requirements.txt
-```
+# 
 
-### 4\. Create the database
+# \## ✨ Key Features
 
-```
-python manage.py migrate
-```
+# 
 
-### 5\. Re-create the model files for your installed scikit-learn (recommended)
+# \- 👤 User registration and login
 
-```
-python train\\\_model.py
-```
+# \- 🔐 Django authentication
 
-(The bundled `.pkl` files were saved with another scikit-learn version. Retraining takes a few seconds
-and avoids version warnings.)
+# \- 📝 Validated 13-parameter prediction form
 
-### 6\. (Optional) Create an admin user
+# \- 🤖 Machine Learning-based prediction
 
-```
-python manage.py createsuperuser
-```
+# \- 📊 Probability displayed as a percentage
 
-### 7\. Start the server
+# \- 🟢 LOW / 🟡 MODERATE / 🔴 HIGH risk classification
 
-```
-python manage.py runserver
-```
+# \- 📚 User-specific prediction history
 
-Open **http://127.0.0.1:8000/** in your browser. Admin: http://127.0.0.1:8000/admin/
+# \- 📋 Detailed prediction result page
 
-\---
+# \- 📄 Downloadable PDF report
 
-## How to use
+# \- 🛠️ Django admin interface
 
-1. Click **Register**, create an account (you are logged in automatically).
-2. Open **New Prediction**, fill in the 13 values and click **Predict Risk**.
-3. Read the risk level and probability on the result page.
-4. Use **Predict for another patient** or return to **Home** to see your history.
+# \- 📱 Responsive web interface
 
-## Input attributes
+# \- ⚠️ Medical and educational disclaimer
 
-|Field|Meaning|Allowed values|
-|-|-|-|
-|age|Age in years|1 - 120|
-|sex|Sex|0 = female, 1 = male|
-|cp|Chest pain type|0 - 3|
-|trestbps|Resting blood pressure (mm Hg)|80 - 250|
-|chol|Serum cholesterol (mg/dl)|100 - 600|
-|fbs|Fasting blood sugar > 120 mg/dl|0 = no, 1 = yes|
-|restecg|Resting ECG result|0 - 2|
-|thalach|Maximum heart rate achieved|60 - 250|
-|exang|Exercise induced angina|0 = no, 1 = yes|
-|oldpeak|ST depression induced by exercise|0 - 10|
-|slope|Slope of the peak exercise ST segment|0 - 2|
-|ca|Major vessels coloured by fluoroscopy|0 - 4|
-|thal|Thal test result|0 - 3 (coding as in your heart.csv)|
+# 
 
-Risk levels (fixed limits chosen for this project, not clinical thresholds):
-below 30% = LOW, 30% to below 60% = MODERATE, 60% and above = HIGH.
+# \---
 
-## Troubleshooting
+# 
 
-|Problem|Fix|
-|-|-|
-|`ModuleNotFoundError: No module named 'django'`|Activate the virtual environment and run `pip install -r requirements.txt`|
-|"The prediction model could not be loaded"|Run `python train\\\_model.py`, then restart the server|
-|`no such table` error|Run `python manage.py migrate`|
-|Port 8000 already in use|`python manage.py runserver 8080`|
-|Changes to the model not visible|Stop and restart `runserver` (the model is cached in memory)|
+# \## 📊 Dataset
 
-## Technologies
+# 
 
-Python, Django, SQLite, scikit-learn, pandas, NumPy, joblib, HTML, CSS, JavaScript.
+# This project uses the \*\*UCI Heart Disease — Cleveland dataset\*\*.
 
+# 
 
+# The original Cleveland dataset contains \*\*303 records\*\*. Six records contain missing values in required attributes and are removed during preprocessing, leaving \*\*297 usable records\*\* for this project.
+
+# 
+
+# \### 🎯 Target Variable
+
+# 
+
+# The original target values are converted into binary classification:
+
+# 
+
+# \- `0` → No presence of heart disease
+
+# \- `1` → Presence of heart disease
+
+# 
+
+# \### 📈 Dataset Distribution
+
+# 
+
+# | Target | Records |
+
+# |---|---:|
+
+# | 0 | 160 |
+
+# | 1 | 137 |
+
+# | \*\*Total\*\* | \*\*297\*\* |
+
+# 
+
+# \### 🧩 Input Features
+
+# 
+
+# The system uses 13 input features:
+
+# 
+
+# ```text
+
+# age
+
+# sex
+
+# cp
+
+# trestbps
+
+# chol
+
+# fbs
+
+# restecg
+
+# thalach
+
+# exang
+
+# oldpeak
+
+# slope
+
+# ca
+
+# thal
 
