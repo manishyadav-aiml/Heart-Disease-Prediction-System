@@ -1,0 +1,36 @@
+{% extends "prediction/base.html" %}
+{% block title %}New Prediction - Heart Disease Prediction System{% endblock %}
+{% block content %}
+<section class="panel">
+  <h1>Enter patient health details</h1>
+  <p class="lead">Fill in all 13 values. Use the same measurements and codes as in the heart disease dataset.</p>
+
+  <form method="post" id="predict-form" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+      <div class="error">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    {% for title, fields in form.grouped %}
+    <fieldset class="group">
+      <legend>{{ title }}</legend>
+      <div class="grid">
+        {% for field in fields %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<small class="help">{{ field.help_text }}</small>{% endif %}
+          {% for e in field.errors %}<div class="error">{{ e }}</div>{% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {% endfor %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn" id="predict-btn">Predict Risk</button>
+      <button type="reset" class="btn btn-outline">Clear</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

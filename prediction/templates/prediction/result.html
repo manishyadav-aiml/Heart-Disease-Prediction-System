@@ -1,0 +1,76 @@
+{% extends "prediction/base.html" %}
+{% load l10n %}
+
+{% block title %}Result - Heart Disease Prediction System{% endblock %}
+
+{% block content %}
+<section class="panel result-panel">
+  <h1>Prediction result</h1>
+
+  <div class="result-top {{ level_class }}">
+    <div class="result-level">
+      <span class="small">Heart disease risk</span>
+      <span class="level-text">{{ record.risk_level }}</span>
+    </div>
+
+    <div class="result-prob">
+      <span class="small">Probability</span>
+      <span class="prob-text">{{ record.probability|floatformat:1 }}%</span>
+    </div>
+  </div>
+
+  <div class="gauge" aria-label="Risk probability">
+    <div class="gauge-zone low"></div>
+    <div class="gauge-zone moderate"></div>
+    <div class="gauge-zone high"></div>
+    <div
+      class="gauge-marker"
+      data-left="{{ record.probability|unlocalize }}"
+    ></div>
+  </div>
+
+  <div class="gauge-labels">
+    <span>0%</span>
+    <span>30%</span>
+    <span>60%</span>
+    <span>100%</span>
+  </div>
+
+  <p class="advice">{{ advice }}</p>
+
+  <p class="small">
+    This is a screening aid only and not a medical diagnosis.
+    Risk levels use fixed limits chosen for this project
+    (below 30% low, 30% to below 60% moderate, 60% and above high).
+  </p>
+
+  <h2>Values you entered</h2>
+
+  <div class="table-wrap">
+    <table class="table">
+      <tbody>
+        {% for label, value in rows %}
+          <tr>
+            <th>{{ label }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions">
+    <a href="{% url 'predict' %}" class="btn">
+      Predict for another patient
+    </a>
+
+    <a href="{% url 'download_pdf' record.pk %}" class="btn">
+      Download PDF Report
+    </a>
+
+    <a href="{% url 'home' %}" class="btn btn-outline">
+      Back to home
+    </a>
+  </div>
+</section>
+{% endblock %}
