@@ -1,23 +1,42 @@
 {% extends "prediction/base.html" %}
+
 {% block title %}Login - Heart Disease Prediction System{% endblock %}
+
 {% block content %}
 <section class="auth-box">
   <h1>Login</h1>
+
   <form method="post" novalidate>
     {% csrf_token %}
+
     {% if form.non_field_errors %}
       <div class="error">{{ form.non_field_errors }}</div>
     {% endif %}
+
     {% for field in form %}
       <div class="field">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
         {{ field }}
-        {% for e in field.errors %}<div class="error">{{ e }}</div>{% endfor %}
+
+        {% for e in field.errors %}
+          <div class="error">{{ e }}</div>
+        {% endfor %}
       </div>
     {% endfor %}
+
     <input type="hidden" name="next" value="{{ next }}">
+
     <button type="submit" class="btn btn-block">Login</button>
   </form>
-  <p class="auth-switch">New here? <a href="{% url 'register' %}">Create an account</a></p>
+
+  <!-- Forgot Password -->
+  <p class="auth-link">
+    <a href="{% url 'password_reset' %}">Forgot your password?</a>
+  </p>
+
+  <p class="auth-switch">
+    New here?
+    <a href="{% url 'register' %}">Create an account</a>
+  </p>
 </section>
 {% endblock %}
